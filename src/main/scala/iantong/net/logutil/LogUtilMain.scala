@@ -10,19 +10,18 @@ import org.slf4j.{Logger, LoggerFactory}
   *
   */
 object LogUtilMain {
-  val logger: Logger = LoggerFactory.getLogger(getClass())
+  val logger: Logger = LoggerFactory.getLogger(getClass)
 
   def main(args: Array[String]) {
     val st = System.currentTimeMillis()
 
     val writer = new PrintWriter(new File(args(1)))
     Source.fromFile(new File(args(0)), "utf-8", 1024 * 1024)
-      .getLines()
+      .getLines
       .toArray
-      .filter(FilterFactory().getFilter(args(2)).filter(_))
-      .map(LogLineFactory().getLogLine(args(3), _))
-//      .sortWith(_.compareTo(_) < 0)
-      .foreach(cl => writer.println(cl.logline))
+      .filter(FilterFactory(args(2)))
+      .sorted(LogOrderingFactory(args(3)))
+      .foreach(writer.println)
     writer.close()
     logger.info("use time " + (System.currentTimeMillis() - st).toString + " ms")
   }

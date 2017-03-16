@@ -2,16 +2,10 @@ package iantong.net.logutil
 
 /**
   * Created by wjj on 2017/3/16.
+  * scala的工厂模式，直接用object，配合apply
   */
-class FilterFactory {
-
-  def getFilter(name:String):Filterable={
-    name match {
-      case "FtpLogFilter" =>FtpLogFilter()
-    }
-  }
-}
-
 object FilterFactory {
-  def apply() = new FilterFactory
+  def apply(name:String):Function[String,Boolean] = name match {
+    case "FtpLogFilter" =>new FtpLogFilter
+  }
 }
